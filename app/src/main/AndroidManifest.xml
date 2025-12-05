@@ -191,6 +191,9 @@
             android:name=".node.SensorServerActivity"
             android:launchMode="singleTop" />
         <activity
+            android:name=".node.PropertyServerActivity"
+            android:launchMode="singleTop" />
+        <activity
             android:name=".node.VendorModelActivity"
             android:launchMode="singleTop" />
         <activity
