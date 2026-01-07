@@ -182,6 +182,12 @@
             android:name=".node.GenericOnOffServerActivity"
             android:launchMode="singleTop" />
         <activity
+            android:name=".node.GenericPowerOnOffServerActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".node.GenericPowerOnOffSetupServerActivity"
+            android:launchMode="singleTop" />
+        <activity
             android:name=".node.SceneServerModelActivity"
             android:launchMode="singleTop" />
         <activity
@@ -189,6 +195,9 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".node.SensorServerActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".node.PropertyServerActivity"
             android:launchMode="singleTop" />
         <activity
             android:name=".node.VendorModelActivity"

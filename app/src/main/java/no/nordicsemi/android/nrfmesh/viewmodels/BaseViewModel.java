@@ -29,6 +29,9 @@ import no.nordicsemi.android.nrfmesh.node.ConfigurationServerActivity;
 import no.nordicsemi.android.nrfmesh.node.GenericLevelServerActivity;
 import no.nordicsemi.android.nrfmesh.node.GenericModelConfigurationActivity;
 import no.nordicsemi.android.nrfmesh.node.GenericOnOffServerActivity;
+import no.nordicsemi.android.nrfmesh.node.PropertyServerActivity;
+import no.nordicsemi.android.nrfmesh.node.GenericPowerOnOffServerActivity;
+import no.nordicsemi.android.nrfmesh.node.GenericPowerOnOffSetupServerActivity;
 import no.nordicsemi.android.nrfmesh.node.SceneServerModelActivity;
 import no.nordicsemi.android.nrfmesh.node.SceneSetupServerModelActivity;
 import no.nordicsemi.android.nrfmesh.node.SensorServerActivity;
@@ -38,7 +41,10 @@ import no.nordicsemi.android.nrfmesh.utils.Utils;
 import static no.nordicsemi.android.mesh.models.SigModelParser.CONFIGURATION_CLIENT;
 import static no.nordicsemi.android.mesh.models.SigModelParser.CONFIGURATION_SERVER;
 import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_LEVEL_SERVER;
+import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_MANUFACTURER_PROPERTY_SERVER;
 import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_ON_OFF_SERVER;
+import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_POWER_ON_OFF_SERVER;
+import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_POWER_ON_OFF_SETUP_SERVER;
 import static no.nordicsemi.android.mesh.models.SigModelParser.SCENE_SERVER;
 import static no.nordicsemi.android.mesh.models.SigModelParser.SCENE_SETUP_SERVER;
 import static no.nordicsemi.android.mesh.models.SigModelParser.SENSOR_SERVER;
@@ -118,6 +124,10 @@ public abstract class BaseViewModel extends ViewModel {
             intent = new Intent(context, ConfigurationClientActivity.class);
         } else if (model.getModelId() == GENERIC_ON_OFF_SERVER) {
             intent = new Intent(context, GenericOnOffServerActivity.class);
+        } else if (model.getModelId() == GENERIC_POWER_ON_OFF_SERVER) {
+            intent = new Intent(context, GenericPowerOnOffServerActivity.class);
+        } else if (model.getModelId() == GENERIC_POWER_ON_OFF_SETUP_SERVER) {
+            intent = new Intent(context, GenericPowerOnOffSetupServerActivity.class);
         } else if (model.getModelId() == GENERIC_LEVEL_SERVER) {
             intent = new Intent(context, GenericLevelServerActivity.class);
         } else if (model.getModelId() == SCENE_SERVER) {
@@ -126,6 +136,8 @@ public abstract class BaseViewModel extends ViewModel {
             intent = new Intent(context, SceneSetupServerModelActivity.class);
         } else if (model.getModelId() == SENSOR_SERVER) {
             intent = new Intent(context, SensorServerActivity.class);
+        } else if (model.getModelId() == GENERIC_MANUFACTURER_PROPERTY_SERVER) {
+            intent = new Intent(context, PropertyServerActivity.class);
         } else if (model instanceof VendorModel) {
             intent = new Intent(context, VendorModelActivity.class);
         } else {
