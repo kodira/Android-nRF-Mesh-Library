@@ -1,26 +1,23 @@
 package no.nordicsemi.android.mesh.transport;
 
-
 import androidx.annotation.NonNull;
+
 import no.nordicsemi.android.mesh.ApplicationKey;
-import no.nordicsemi.android.mesh.opcodes.ApplicationMessageOpCodes;
 import no.nordicsemi.android.mesh.utils.SecureUtils;
+import no.nordicsemi.android.mesh.opcodes.ApplicationMessageOpCodes;
 
-/**
- * To be used as a wrapper class when creating a GenericOnOffGet message.
- */
-public class GenericOnOffGet extends ApplicationMessage {
+public class GenericUserPropertiesGet extends ApplicationMessage {
 
-    private static final String TAG = GenericOnOffGet.class.getSimpleName();
-    private static final int OP_CODE = ApplicationMessageOpCodes.GENERIC_ON_OFF_GET;
+    private static final String TAG = GenericUserPropertiesGet.class.getSimpleName();
+    private static final int OP_CODE = ApplicationMessageOpCodes.GENERIC_USER_PROPERTIES_GET;
 
     /**
-     * Constructs GenericOnOffGet message.
+     * Constructs GenericUserPropertiesGet message.
      *
-     * @param appKey application key for this message
+     * @param appKey {@link ApplicationKey} key for this message
      * @throws IllegalArgumentException if any illegal arguments are passed
      */
-    public GenericOnOffGet(@NonNull final ApplicationKey appKey) throws IllegalArgumentException {
+    public GenericUserPropertiesGet(@NonNull final ApplicationKey appKey) throws IllegalArgumentException {
         super(appKey);
         assembleMessageParameters();
     }

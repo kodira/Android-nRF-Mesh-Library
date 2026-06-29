@@ -9,26 +9,26 @@ import java.util.ArrayList;
 
 import no.nordicsemi.android.mesh.utils.BitReader;
 
-public class GenericManufacturerPropertiesStatus extends ApplicationStatusMessage  implements Parcelable {
+public class GenericUserPropertiesStatus extends ApplicationStatusMessage implements Parcelable {
 
     private final int opCode;
     private ArrayList<Short> propertyIds;
 
-    private static final Creator<GenericManufacturerPropertiesStatus> CREATOR = new Parcelable.Creator<GenericManufacturerPropertiesStatus>() {
+    private static final Creator<GenericUserPropertiesStatus> CREATOR = new Parcelable.Creator<GenericUserPropertiesStatus>() {
         @Override
-        public GenericManufacturerPropertiesStatus createFromParcel(Parcel in) {
+        public GenericUserPropertiesStatus createFromParcel(Parcel in) {
             final AccessMessage message = in.readParcelable(AccessMessage.class.getClassLoader());
             //noinspection ConstantConditions
-            return new GenericManufacturerPropertiesStatus(message);
+            return new GenericUserPropertiesStatus(message);
         }
 
         @Override
-        public GenericManufacturerPropertiesStatus[] newArray(int size) {
-            return new GenericManufacturerPropertiesStatus[size];
+        public GenericUserPropertiesStatus[] newArray(int size) {
+            return new GenericUserPropertiesStatus[size];
         }
     };
 
-    public GenericManufacturerPropertiesStatus(@NonNull final AccessMessage message) {
+    public GenericUserPropertiesStatus(@NonNull final AccessMessage message) {
         super(message);
         this.opCode = message.getOpCode();
         this.mMessage = message;

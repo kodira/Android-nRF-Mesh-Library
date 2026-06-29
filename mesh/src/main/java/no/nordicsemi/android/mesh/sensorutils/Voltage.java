@@ -21,7 +21,7 @@ public class Voltage extends DevicePropertyCharacteristic<Float> {
     /**
      * Voltage characteristic
      *
-     * @param current Voltage in units of volt.
+     * @param voltage Voltage in units of volt.
      */
     public Voltage(final float voltage) {
         this.value = voltage;

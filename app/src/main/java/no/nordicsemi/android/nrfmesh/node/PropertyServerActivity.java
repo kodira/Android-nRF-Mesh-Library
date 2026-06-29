@@ -19,13 +19,21 @@ import java.util.Queue;
 import dagger.hilt.android.AndroidEntryPoint;
 import no.nordicsemi.android.mesh.ApplicationKey;
 import no.nordicsemi.android.mesh.logger.MeshLogger;
+import no.nordicsemi.android.mesh.models.GenericAdminPropertyServer;
 import no.nordicsemi.android.mesh.models.GenericManufacturerPropertyServer;
+import no.nordicsemi.android.mesh.models.GenericUserPropertyServer;
 import no.nordicsemi.android.mesh.sensorutils.DeviceProperty;
 import no.nordicsemi.android.mesh.sensorutils.DevicePropertyCharacteristic;
 import no.nordicsemi.android.mesh.transport.Element;
+import no.nordicsemi.android.mesh.transport.GenericAdminPropertiesGet;
+import no.nordicsemi.android.mesh.transport.GenericAdminPropertiesStatus;
+import no.nordicsemi.android.mesh.transport.GenericAdminPropertyGet;
 import no.nordicsemi.android.mesh.transport.GenericManufacturerPropertiesGet;
 import no.nordicsemi.android.mesh.transport.GenericManufacturerPropertiesStatus;
 import no.nordicsemi.android.mesh.transport.GenericManufacturerPropertyGet;
+import no.nordicsemi.android.mesh.transport.GenericUserPropertiesGet;
+import no.nordicsemi.android.mesh.transport.GenericUserPropertiesStatus;
+import no.nordicsemi.android.mesh.transport.GenericUserPropertyGet;
 import no.nordicsemi.android.mesh.transport.GenericPropertyStatus;
 import no.nordicsemi.android.mesh.transport.MeshMessage;
 import no.nordicsemi.android.mesh.transport.MeshModel;
@@ -48,14 +56,12 @@ public class PropertyServerActivity extends ModelConfigurationActivity {
         super.onCreate(savedInstanceState);
         mSwipe.setOnRefreshListener(this);
         final MeshModel model = mViewModel.getSelectedModel().getValue();
-        if (model instanceof GenericManufacturerPropertyServer) {
+        if (model instanceof GenericManufacturerPropertyServer ||
+                model instanceof GenericUserPropertyServer ||
+                model instanceof GenericAdminPropertyServer) {
             propertiesBinding = LayoutPropertiesBinding.inflate(getLayoutInflater(), binding.nodeControlsContainer, true);
 
             propertiesBinding.actionGet.setOnClickListener(v -> sendPropertiesGet());
-
-            final LayoutContainerBinding placeholder = LayoutContainerBinding.inflate(getLayoutInflater(), propertiesBinding.propertiesInfoContainer, false);
-            placeholder.title.setText(R.string.properties_placeholder);
-            propertiesBinding.propertiesInfoContainer.addView(placeholder.getRoot());
 
             mViewModel.getSelectedModel().observe(this, meshModel -> {
                 if (meshModel != null) {
@@ -88,19 +94,29 @@ public class PropertyServerActivity extends ModelConfigurationActivity {
             }
         }
 
-        if (meshMessage instanceof GenericManufacturerPropertiesStatus) {
+        if (meshMessage instanceof GenericManufacturerPropertiesStatus ||
+                meshMessage instanceof GenericUserPropertiesStatus ||
+                meshMessage instanceof GenericAdminPropertiesStatus) {
             clearViews();
             final Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_chart);
-            final GenericManufacturerPropertiesStatus status = (GenericManufacturerPropertiesStatus) meshMessage;
+            
+            ArrayList<Short> propertyIds = new ArrayList<>();
+            if (meshMessage instanceof GenericManufacturerPropertiesStatus) {
+                propertyIds = ((GenericManufacturerPropertiesStatus) meshMessage).getPropertyIds();
+            } else if (meshMessage instanceof GenericUserPropertiesStatus) {
+                propertyIds = ((GenericUserPropertiesStatus) meshMessage).getPropertyIds();
+            } else if (meshMessage instanceof GenericAdminPropertiesStatus) {
+                propertyIds = ((GenericAdminPropertiesStatus) meshMessage).getPropertyIds();
+            }
 
-            if (status.getPropertyIds().isEmpty()) {
+            if (propertyIds.isEmpty()) {
                 // Show info "No properties found"
                 final LayoutContainerBinding binding = LayoutContainerBinding.inflate(getLayoutInflater(), propertiesBinding.propertiesInfoContainer, false);
                 binding.title.setText(R.string.properties_non_found);
                 propertiesBinding.propertiesInfoContainer.addView(binding.getRoot());
             } else {
                 // Add all found properties to the layout
-                for (Short id : status.getPropertyIds()) {
+                for (Short id : propertyIds) {
                     try {
                         DeviceProperty deviceProperty = DeviceProperty.from(id);
 
@@ -142,7 +158,15 @@ public class PropertyServerActivity extends ModelConfigurationActivity {
             final Integer keyIndex = mViewModel.getSelectedModel().getValue().getBoundAppKeyIndexes().get(0);
             if (keyIndex != null) {
                 final ApplicationKey key = mViewModel.getNetworkLiveData().getAppKeys().get(keyIndex);
-                mViewModel.getMessageQueue().add(new GenericManufacturerPropertiesGet(key));
+                final MeshModel model = mViewModel.getSelectedModel().getValue();
+                
+                if (model instanceof GenericManufacturerPropertyServer) {
+                    mViewModel.getMessageQueue().add(new GenericManufacturerPropertiesGet(key));
+                } else if (model instanceof GenericUserPropertyServer) {
+                    mViewModel.getMessageQueue().add(new GenericUserPropertiesGet(key));
+                } else if (model instanceof GenericAdminPropertyServer) {
+                    mViewModel.getMessageQueue().add(new GenericAdminPropertiesGet(key));
+                }
                 clearViews();
                 sendMessage(mViewModel.getMessageQueue().peek());
             }
@@ -169,7 +193,15 @@ public class PropertyServerActivity extends ModelConfigurationActivity {
                 if (keyIndex != null) {
                     clearViews();
                     final ApplicationKey key = mViewModel.getNetworkLiveData().getAppKeys().get(keyIndex);
-                    sendAcknowledgedMessage(element.getElementAddress(), new GenericManufacturerPropertiesGet(key));
+                    final MeshModel model = mViewModel.getSelectedModel().getValue();
+                    
+                    if (model instanceof GenericManufacturerPropertyServer) {
+                        sendAcknowledgedMessage(element.getElementAddress(), new GenericManufacturerPropertiesGet(key));
+                    } else if (model instanceof GenericUserPropertyServer) {
+                        sendAcknowledgedMessage(element.getElementAddress(), new GenericUserPropertiesGet(key));
+                    } else if (model instanceof GenericAdminPropertyServer) {
+                        sendAcknowledgedMessage(element.getElementAddress(), new GenericAdminPropertiesGet(key));
+                    }
                 }
             }
         }
@@ -182,7 +214,15 @@ public class PropertyServerActivity extends ModelConfigurationActivity {
                 final Integer keyIndex = mViewModel.getSelectedModel().getValue().getBoundAppKeyIndexes().get(0);
                 if (keyIndex != null) {
                     final ApplicationKey key = mViewModel.getNetworkLiveData().getAppKeys().get(keyIndex);
-                    sendAcknowledgedMessage(element.getElementAddress(), new GenericManufacturerPropertyGet(key, property));
+                    final MeshModel model = mViewModel.getSelectedModel().getValue();
+                    
+                    if (model instanceof GenericManufacturerPropertyServer) {
+                        sendAcknowledgedMessage(element.getElementAddress(), new GenericManufacturerPropertyGet(key, property));
+                    } else if (model instanceof GenericUserPropertyServer) {
+                        sendAcknowledgedMessage(element.getElementAddress(), new GenericUserPropertyGet(key, property));
+                    } else if (model instanceof GenericAdminPropertyServer) {
+                        sendAcknowledgedMessage(element.getElementAddress(), new GenericAdminPropertyGet(key, property));
+                    }
                 }
             }
         }

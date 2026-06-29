@@ -538,6 +538,12 @@ public class ApplicationMessageOpCodes {
      */
     public static final int GENERIC_ON_POWER_UP_STATUS = 0x8212;
 
+    public static final int GENERIC_ADMIN_PROPERTIES_STATUS = 0x47;
+
+    public static final int GENERIC_ADMIN_PROPERTIES_GET = 0x822C;
+
+    public static final int GENERIC_ADMIN_PROPERTY_GET = 0x822D;
+
     /**
      * Opcode for the "Generic Admin Property Status" message
      */
@@ -553,6 +559,12 @@ public class ApplicationMessageOpCodes {
     public static final int GENERIC_MANUFACTURER_PROPERTIES_GET = 0x822A;
 
     public static final int GENERIC_MANUFACTURER_PROPERTY_GET = 0x822B;
+
+    public static final int GENERIC_USER_PROPERTIES_STATUS = 0x4B;
+
+    public static final int GENERIC_USER_PROPERTIES_GET = 0x822E;
+
+    public static final int GENERIC_USER_PROPERTY_GET = 0x822F;
 
     /**
      * Opcode for the "Generic User Property Status" message

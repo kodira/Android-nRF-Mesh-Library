@@ -46,10 +46,12 @@ import no.nordicsemi.android.nrfmesh.utils.Utils;
 
 import static no.nordicsemi.android.mesh.models.SigModelParser.CONFIGURATION_CLIENT;
 import static no.nordicsemi.android.mesh.models.SigModelParser.CONFIGURATION_SERVER;
+import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_ADMIN_PROPERTY_SERVER;
 import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_BATTERY_SERVER;
 import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_LEVEL_SERVER;
 import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_MANUFACTURER_PROPERTY_SERVER;
 import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_ON_OFF_SERVER;
+import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_USER_PROPERTY_SERVER;
 import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_POWER_ON_OFF_SERVER;
 import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_POWER_ON_OFF_SETUP_SERVER;
 import static no.nordicsemi.android.mesh.models.SigModelParser.GENERIC_POWER_LEVEL_SERVER;
@@ -162,6 +164,10 @@ public abstract class BaseViewModel extends ViewModel {
             intent = new Intent(context, TimeServerActivity.class);
         } else if (model.getModelId() == TIME_SETUP_SERVER) {
             intent = new Intent(context, TimeSetupServerActivity.class);
+        } else if (model.getModelId() == GENERIC_USER_PROPERTY_SERVER) {
+            intent = new Intent(context, PropertyServerActivity.class);
+        } else if (model.getModelId() == GENERIC_ADMIN_PROPERTY_SERVER) {
+            intent = new Intent(context, PropertyServerActivity.class);
         } else if (model instanceof VendorModel) {
             intent = new Intent(context, VendorModelActivity.class);
         } else {

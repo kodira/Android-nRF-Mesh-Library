@@ -11,9 +11,9 @@ import no.nordicsemi.android.mesh.utils.BitReader;
 public class GenericPropertyStatus extends ApplicationStatusMessage  implements Parcelable {
 
     private final int opCode;
-    private short propertyId;
-    private byte userAccess;
-    private byte[] propertyValue;
+    protected short propertyId;
+    protected byte userAccess;
+    protected byte[] propertyValue;
 
     private static final Creator<GenericPropertyStatus> CREATOR = new Creator<GenericPropertyStatus>() {
         @Override
