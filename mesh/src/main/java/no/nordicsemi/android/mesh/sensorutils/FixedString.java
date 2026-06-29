@@ -1,10 +1,14 @@
 package no.nordicsemi.android.mesh.sensorutils;
 
+import android.util.Log;
+
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
+
+import no.nordicsemi.android.mesh.utils.MeshParserUtils;
 
 /**
  * The Fixed String characteristic represents an 8, 16, 24, 36 or a 64-octet UTF-8 string.
@@ -15,9 +19,16 @@ public class FixedString extends DevicePropertyCharacteristic<String> {
     @SuppressWarnings("CharsetObjectCanBeUsed")
     @RestrictTo(RestrictTo.Scope.LIBRARY)
     public FixedString(@NonNull final byte[] data, final int offset, final int length) {
-        super(data, offset, length);
-        this.length = length;
-        value = new String(data, offset, length, Charset.forName("UTF-8"));
+        // Calling super would throw in case of length mismatch, so we do not call it.
+        // Instead we just log a warning and continue since this usually still works.
+        if (length > data.length) {
+            Log.w("FixedString", "Reported length=" + length + " but actual length=" + data.length + " - trying to parse anyways.");
+            this.length = data.length;
+        } else {
+            this.length = length;
+        }
+
+        value = new String(data, offset, this.length, Charset.forName("UTF-8"));
     }
 
     /**
